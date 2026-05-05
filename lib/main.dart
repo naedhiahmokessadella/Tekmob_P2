@@ -1,6 +1,4 @@
-import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,7 +14,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
       ),
       home: const MainNavigation(),
     );
@@ -35,9 +33,10 @@ class MainNavigation extends StatefulWidget {
 class _MainNavigationState extends State<MainNavigation> {
   int _selectedIndex = 0;
 
+  // FIX: nama class konsisten → TodoPage (bukan ToDoPage)
   final List<Widget> _pages = const [
-    ProfilePage(),   // Stateless Page
-    TodoPage(),      // Stateful Page
+    ProfilePage(),
+    TodoPage(),
   ];
 
   @override
@@ -67,6 +66,8 @@ class _MainNavigationState extends State<MainNavigation> {
     );
   }
 }
+
+// HALAMAN 1 — STATELESS PAGE (Profil)
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -133,7 +134,8 @@ class ProfilePage extends StatelessWidget {
                 const SizedBox(width: 4),
                 Text(
                   'Yogyakarta, Indonesia',
-                  style: TextStyle(color: theme.colorScheme.onSurfaceVariant),
+                  style:
+                      TextStyle(color: theme.colorScheme.onSurfaceVariant),
                 ),
               ],
             ),
@@ -165,7 +167,10 @@ class ProfilePage extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Mahasiswa aktif prodi Sistem Informasi yang belajar tentang bidang mobile development dan analisis data.',
+                    'Mahasiswa aktif prodi Sistem Informasi yang belajar '
+                    'tentang bidang mobile development dan analisis data. '
+                    'Disini saya coba-coba buat aplikasi sederhana untuk latihan flutter, '
+                    'saya memilih membuat to-do list tugas kuliah sederhana ala saya ',
                     style: TextStyle(
                       color: theme.colorScheme.onPrimaryContainer,
                       height: 1.5,
@@ -176,7 +181,6 @@ class ProfilePage extends StatelessWidget {
             ),
 
             const SizedBox(height: 24),
-
           ],
         ),
       ),
@@ -184,74 +188,8 @@ class ProfilePage extends StatelessWidget {
   }
 }
 
-// Widget pembantu — StatCard
-class _StatCard extends StatelessWidget {
-  final String label;
-  final String value;
-  const _StatCard({required this.label, required this.value});
+// MODEL DATA TUGAS
 
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Column(
-      children: [
-        Text(value,
-            style: theme.textTheme.headlineSmall?.copyWith(
-              fontWeight: FontWeight.bold,
-              color: theme.colorScheme.primary,
-            )),
-        Text(label,
-            style: TextStyle(color: theme.colorScheme.onSurfaceVariant)),
-      ],
-    );
-  }
-}
-
-// Widget pembantu — HobbyChip
-class _HobbyChip extends StatelessWidget {
-  final String label;
-  final IconData icon;
-  const _HobbyChip({required this.label, required this.icon});
-
-  @override
-  Widget build(BuildContext context) {
-    return Chip(
-      avatar: Icon(icon, size: 16),
-      label: Text(label),
-    );
-  }
-}
-
-// Widget pembantu — ContactTile
-class _ContactTile extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  const _ContactTile({required this.icon, required this.label});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
-      child: Row(
-        children: [
-          Icon(icon, size: 20, color: Theme.of(context).colorScheme.primary),
-          const SizedBox(width: 10),
-          Text(label),
-        ],
-      ),
-    );
-  }
-}
-
-// HALAMAN 2 — STATEFUL PAGE (To-Do List Tugas)
-
-class ToDoPage extends StatefulWidget {
-  const ToDoPage({super.key});
-  @override
-  State<ToDoPage> createState() => _ToDoPageState();
-}
-
-// ── Model data tugas ──
 class TodoItem {
   final String id;
   String title;
@@ -268,40 +206,50 @@ class TodoItem {
   });
 }
 
-class _QuizPageState extends State<QuizPage> {
-  // ── State ──
+// HALAMAN 2 — STATEFUL PAGE (To-Do List)
+// FIX: nama class diseragamkan → TodoPage & _TodoPageState
+
+class TodoPage extends StatefulWidget {
+  const TodoPage({super.key});
+
+  @override
+  State<TodoPage> createState() => _TodoPageState();
+}
+
+class _TodoPageState extends State<TodoPage> {
+  // State data tugas
   final List<TodoItem> _todos = [
     TodoItem(
       id: '1',
-      title: 'Presentasi DPSI',
-      matkul: 'Teori DPSI',
-      deadline: '30 April 2026',
+      title: 'Tugas flutter',
+      matkul: 'Tekmob',
+      deadline: '6 Mei 2026',
     ),
     TodoItem(
       id: '2',
       title: 'Laprak',
-      matkul: 'Praktikum KSI',
-      deadline: '1 Mei 2026',
+      matkul: 'KSI',
+      deadline: '6 Mei 2026',
       isDone: true,
     ),
     TodoItem(
       id: '3',
-      title: 'BPMN To-Be',
-      matkul: 'Arsitektur Enterprise',
-      deadline: '3 Mei 2026',
+      title: 'Kalimat pasif',
+      matkul: 'Bahasa Indonesia',
+      deadline: '5 Mei 2026',
     ),
     TodoItem(
       id: '4',
-      title: 'Menghitung IP',
-      matkul: 'Praktikum Jarkom',
-      deadline: '5 Mei 2026',
+      title: 'Observasi',
+      matkul: 'RDPP',
+      deadline: '9 Mei 2026',
       isDone: true,
     ),
   ];
 
-  String _filterStatus = 'Semua'; // 'Semua', 'Belum', 'Selesai'
+  String _filterStatus = 'Semua'; // Semua, Belum, Selesai
 
-  // ── Controller untuk dialog tambah tugas ──
+  // controller untuk dialog tambah tugas
   final _titleCtrl = TextEditingController();
   final _matkulCtrl = TextEditingController();
   final _deadlineCtrl = TextEditingController();
@@ -314,7 +262,7 @@ class _QuizPageState extends State<QuizPage> {
     super.dispose();
   }
 
-  // ── Toggle selesai ──
+  // Toggle selesai
   void _toggleDone(String id) {
     setState(() {
       final todo = _todos.firstWhere((t) => t.id == id);
@@ -322,36 +270,36 @@ class _QuizPageState extends State<QuizPage> {
     });
   }
 
-  // ── Hapus tugas ──
+  // Hapus tugas
   void _deleteTodo(String id) {
     setState(() {
       _todos.removeWhere((t) => t.id == id);
     });
   }
 
-  // ── Tambah tugas baru ──
+  // Tambah tugas baru
   void _addTodo() {
-  if (_titleCtrl.text.trim().isEmpty) return;
+    if (_titleCtrl.text.trim().isEmpty) return;
 
-  setState(() {
-    _todos.add(TodoItem(
-      id: DateTime.now().millisecondsSinceEpoch.toString(),
-      title: _titleCtrl.text.trim(),
-      matkul: _matkulCtrl.text.trim().isEmpty
-          ? 'Umum'
-          : _matkulCtrl.text.trim(),
-      deadline: _deadlineCtrl.text.trim().isEmpty
-          ? '-'
-          : _deadlineCtrl.text.trim(),
-    ));
-  });
+    setState(() {
+      _todos.add(TodoItem(
+        id: DateTime.now().millisecondsSinceEpoch.toString(),
+        title: _titleCtrl.text.trim(),
+        matkul: _matkulCtrl.text.trim().isEmpty
+            ? 'Umum'
+            : _matkulCtrl.text.trim(),
+        deadline: _deadlineCtrl.text.trim().isEmpty
+            ? '-'
+            : _deadlineCtrl.text.trim(),
+      ));
+    });
 
-  _titleCtrl.clear();
-  _matkulCtrl.clear();
-  _deadlineCtrl.clear();
-}
+    _titleCtrl.clear();
+    _matkulCtrl.clear();
+    _deadlineCtrl.clear();
+  }
 
-  // ── Dialog tambah tugas ──
+  // Dialog tambah tugas
   void _showAddDialog() {
     _titleCtrl.clear();
     _matkulCtrl.clear();
@@ -379,24 +327,19 @@ class _QuizPageState extends State<QuizPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Judul modal
-                  Row(
-                    children: [
-                      Text(
-                        'Tambah Tugas Baru',
-                        style: theme.textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
+                  Text(
+                    'Tambah Tugas Baru',
+                    style: theme.textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   const SizedBox(height: 20),
 
-                  // 1. TextField — judul tugas
+                  // TextField — judul tugas
                   TextField(
                     controller: _titleCtrl,
                     decoration: InputDecoration(
-                      labelText: 'Nama Tugas *',
-                      prefixIcon: const Icon(Icons.assignment),
+                      labelText: 'Nama Tugas',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -404,12 +347,11 @@ class _QuizPageState extends State<QuizPage> {
                   ),
                   const SizedBox(height: 12),
 
-                  // 2. TextField — mata kuliah
+                  // TextField — mata kuliah
                   TextField(
                     controller: _matkulCtrl,
                     decoration: InputDecoration(
                       labelText: 'Mata Kuliah',
-                      prefixIcon: const Icon(Icons.school),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -417,20 +359,19 @@ class _QuizPageState extends State<QuizPage> {
                   ),
                   const SizedBox(height: 12),
 
-                  // 3. TextField — deadline
+                  // TextField — deadline
                   TextField(
                     controller: _deadlineCtrl,
                     decoration: InputDecoration(
-                      labelText: 'Deadline (contoh: 10 Mei 2026)',
-                      prefixIcon: const Icon(Icons.calendar_today),
+                      labelText: 'Deadline',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 20),
 
-                  // 5. Tombol simpan
+                  // Tombol simpan
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton.icon(
@@ -441,14 +382,15 @@ class _QuizPageState extends State<QuizPage> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: theme.colorScheme.primary,
                         foregroundColor: Colors.white,
-                        padding:
-                            const EdgeInsets.symmetric(vertical: 14),
+                        padding: const EdgeInsets.symmetric(vertical: 14),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      label: const Text('Simpan Tugas',
-                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      label: const Text(
+                        'Simpan Tugas',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
                     ),
                   ),
                 ],
@@ -470,6 +412,14 @@ class _QuizPageState extends State<QuizPage> {
     return _todos;
   }
 
+  // Warna avatar berdasarkan inisial matkul
+  Color _avatarColor(BuildContext context, bool isDone) {
+    final theme = Theme.of(context);
+    return isDone
+        ? theme.colorScheme.outline.withOpacity(0.4)
+        : theme.colorScheme.primary;
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -486,7 +436,7 @@ class _QuizPageState extends State<QuizPage> {
         foregroundColor: Colors.white,
       ),
 
-      // FAB — tambah tugas
+      // tambah tugas
       floatingActionButton: FloatingActionButton.extended(
         onPressed: _showAddDialog,
         icon: const Icon(Icons.add),
@@ -497,22 +447,22 @@ class _QuizPageState extends State<QuizPage> {
 
       body: Column(
         children: [
-          // Header progress 
+          // Header progress
           Container(
             margin: const EdgeInsets.all(16),
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               color: theme.colorScheme.primaryContainer,
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(20), // border radius
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-
-                // 1. Row — ringkasan
+                // Row — ringkasa
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    // Column di dalam Row
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -533,7 +483,7 @@ class _QuizPageState extends State<QuizPage> {
                       ],
                     ),
 
-                    // 2. Container — persentase
+                    // Container persentase
                     Container(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 14, vertical: 8),
@@ -554,7 +504,7 @@ class _QuizPageState extends State<QuizPage> {
                 ),
                 const SizedBox(height: 12),
 
-                // 3. LinearProgressIndicator
+                // LinearProgressIndicator
                 ClipRRect(
                   borderRadius: BorderRadius.circular(8),
                   child: LinearProgressIndicator(
@@ -578,8 +528,6 @@ class _QuizPageState extends State<QuizPage> {
                 final isActive = _filterStatus == label;
                 return Padding(
                   padding: const EdgeInsets.only(right: 8),
-
-                  // 4. FilterChip
                   child: FilterChip(
                     label: Text(label),
                     selected: isActive,
@@ -595,18 +543,19 @@ class _QuizPageState extends State<QuizPage> {
 
           const SizedBox(height: 8),
 
-          // ── Daftar tugas
+          // Daftar tugas
           Expanded(
-            // 5. ListView
             child: _filteredTodos.isEmpty
                 ? Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.inbox,
-                            size: 60,
-                            color: theme.colorScheme.onSurfaceVariant
-                                .withOpacity(0.3)),
+                        Icon(
+                          Icons.inbox,
+                          size: 60,
+                          color: theme.colorScheme.onSurfaceVariant
+                              .withOpacity(0.3),
+                        ),
                         const SizedBox(height: 12),
                         Text(
                           'Tidak ada tugas',
@@ -623,7 +572,7 @@ class _QuizPageState extends State<QuizPage> {
                     itemBuilder: (ctx, i) {
                       final todo = _filteredTodos[i];
 
-                      // 6. Dismissible — geser untuk hapus
+                      // Dismissible
                       return Dismissible(
                         key: Key(todo.id),
                         direction: DismissDirection.endToStart,
@@ -639,46 +588,53 @@ class _QuizPageState extends State<QuizPage> {
                           child: const Icon(Icons.delete,
                               color: Colors.white, size: 28),
                         ),
-                        // 7. Card — item tugas
+
+                        // Card — item tugas
                         child: Card(
                           margin: const EdgeInsets.only(bottom: 12),
                           elevation: 0,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
+                            borderRadius: BorderRadius.circular(16), // border radius
                             side: BorderSide(
                               color: todo.isDone
-                                  ? theme.colorScheme.outline
-                                      .withOpacity(0.2)
-                                  : theme.colorScheme.outline
-                                      .withOpacity(0.5),
+                                  ? theme.colorScheme.outline.withOpacity(0.2)
+                                  : theme.colorScheme.outline.withOpacity(0.5),
                             ),
                           ),
                           color: todo.isDone
                               ? theme.colorScheme.surfaceContainerHighest
                               : theme.colorScheme.surface,
+
                           child: Padding(
-                            padding: const EdgeInsets.all(14),
+                            padding: const EdgeInsets.all(12), // paddin
                             child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
 
-                                // 8. Checkbox
-                                Checkbox(
-                                  value: todo.isDone,
-                                  onChanged: (_) => _toggleDone(todo.id),
-                                  activeColor: theme.colorScheme.primary,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(4),
+                                // AVATAR
+                                CircleAvatar(
+                                  radius: 22,
+                                  backgroundColor:
+                                      _avatarColor(context, todo.isDone),
+                                  child: Icon(
+                                    todo.isDone
+                                        ? Icons.check
+                                        : Icons.assignment_outlined,
+                                    color: Colors.white,
+                                    size: 20,
                                   ),
                                 ),
-                                const SizedBox(width: 4),
+
+                                const SizedBox(width: 12),
+
+                                // TEKS (Expanded)
                                 Expanded(
-                                  child: Column(
+                                  child: Column( // Column
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
 
-                                      // 9. Text — judul tugas
+                                      // Judul tugas
                                       Text(
                                         todo.title,
                                         style: theme.textTheme.titleSmall
@@ -693,41 +649,76 @@ class _QuizPageState extends State<QuizPage> {
                                               : theme.colorScheme.onSurface,
                                         ),
                                       ),
+
                                       const SizedBox(height: 4),
 
-                                      // 10. Row — matkul & deadline
+                                      // Deskripsi: matkul & deadline
                                       Row(
-                                      children: [
-                                        Icon(Icons.school, size: 13),
-                                        SizedBox(width: 4),
-                                        Flexible(
-                                          child: Text(
-                                            todo.matkul,
-                                            overflow: TextOverflow.ellipsis,
+                                        children: [
+                                          Icon(
+                                            Icons.school,
+                                            size: 13,
+                                            color: theme.colorScheme
+                                                .onSurfaceVariant,
                                           ),
-                                        ),
-                                        SizedBox(width: 12),
-                                        Icon(Icons.schedule, size: 13),
-                                        SizedBox(width: 4),
-                                        Flexible(
-                                          child: Text(
-                                            todo.deadline,
-                                            overflow: TextOverflow.ellipsis,
+                                          const SizedBox(width: 4),
+                                          Flexible( // Flexible
+                                            child: Text(
+                                              todo.matkul,
+                                              style: theme.textTheme.bodySmall
+                                                  ?.copyWith(
+                                                color: theme.colorScheme
+                                                    .onSurfaceVariant,
+                                              ),
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
                                           ),
-                                        ),
-                                      ],
-                                    )
-                                  ],
+                                          const SizedBox(width: 10),
+                                          Icon(
+                                            Icons.schedule,
+                                            size: 13,
+                                            color: theme.colorScheme
+                                                .onSurfaceVariant,
+                                          ),
+                                          const SizedBox(width: 4),
+                                          Flexible( // Flexible
+                                            child: Text(
+                                              todo.deadline,
+                                              style: theme.textTheme.bodySmall
+                                                  ?.copyWith(
+                                                color: theme.colorScheme
+                                                    .onSurfaceVariant,
+                                              ),
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
                                   ),
                                 ),
 
-                                // 11. IconButton — hapus
-                                IconButton(
-                                  icon: const Icon(Icons.delete_outline,
-                                      size: 20),
-                                  color:
-                                      theme.colorScheme.onSurfaceVariant,
-                                  onPressed: () => _deleteTodo(todo.id),
+                                // AKSI: Checkbox + Hapus
+                                Column(
+                                  children: [
+                                    // Checkbox — toggle selesai
+                                    Checkbox(
+                                      value: todo.isDone,
+                                      onChanged: (_) => _toggleDone(todo.id),
+                                      activeColor: theme.colorScheme.primary,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(4),
+                                      ),
+                                    ),
+                                    // IconButton — hapus
+                                    IconButton(
+                                      icon: const Icon(
+                                          Icons.delete_outline,
+                                          size: 20),
+                                      color: theme.colorScheme.onSurfaceVariant,
+                                      onPressed: () => _deleteTodo(todo.id),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
